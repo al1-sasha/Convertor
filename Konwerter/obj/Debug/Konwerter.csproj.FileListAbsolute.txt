@@ -10,3 +10,16 @@ C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwertor\Konwerter\Konwerter\obj\Debug\
 C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwertor\Konwerter\Konwerter\bin\Debug\itextsharp.dll
 C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwertor\Konwerter\Konwerter\bin\Debug\itextsharp.pdfa.dll
 C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwertor\Konwerter\Konwerter\bin\Debug\itextsharp.xtra.dll
+C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwerter\Convertor\Konwerter\bin\Debug\Konwerter.exe.config
+C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwerter\Convertor\Konwerter\obj\Debug\Konwerter.exe
+C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwerter\Convertor\Konwerter\obj\Debug\Konwerter.pdb
+C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwerter\Convertor\Konwerter\bin\Debug\Konwerter.exe
+C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwerter\Convertor\Konwerter\bin\Debug\Konwerter.pdb
+C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwerter\Convertor\Konwerter\bin\Debug\itextsharp.dll
+C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwerter\Convertor\Konwerter\bin\Debug\itextsharp.pdfa.dll
+C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwerter\Convertor\Konwerter\bin\Debug\itextsharp.xtra.dll
+C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwerter\Convertor\Konwerter\obj\Debug\Konwerter.csprojResolveAssemblyReference.cache
+C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwerter\Convertor\Konwerter\obj\Debug\Konwerter.Form1.resources
+C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwerter\Convertor\Konwerter\obj\Debug\Konwerter.Properties.Resources.resources
+C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwerter\Convertor\Konwerter\obj\Debug\Konwerter.csproj.GenerateResource.Cache
+C:\Users\saleksak.OPGKLUBLIN\Dropbox\C#\Konwerter\Convertor\Konwerter\bin\Debug\GhostscriptSharp.dll

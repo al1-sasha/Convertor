@@ -33,6 +33,8 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.TB_Rosrz = new System.Windows.Forms.TextBox();
             this.B_jpg2pdf = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.b_pdf2jpg = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // B_OpenDirectory
@@ -57,7 +59,7 @@
             // 
             // TB_Rosrz
             // 
-            this.TB_Rosrz.Location = new System.Drawing.Point(30, 238);
+            this.TB_Rosrz.Location = new System.Drawing.Point(30, 287);
             this.TB_Rosrz.Name = "TB_Rosrz";
             this.TB_Rosrz.Size = new System.Drawing.Size(100, 20);
             this.TB_Rosrz.TabIndex = 2;
@@ -73,11 +75,33 @@
             this.B_jpg2pdf.UseVisualStyleBackColor = true;
             this.B_jpg2pdf.Click += new System.EventHandler(this.B_jpg2pdf_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(30, 147);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 38);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "Podziel plik pdf";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // b_pdf2jpg
+            // 
+            this.b_pdf2jpg.Location = new System.Drawing.Point(30, 203);
+            this.b_pdf2jpg.Name = "b_pdf2jpg";
+            this.b_pdf2jpg.Size = new System.Drawing.Size(75, 23);
+            this.b_pdf2jpg.TabIndex = 5;
+            this.b_pdf2jpg.Text = "pdf->jpg";
+            this.b_pdf2jpg.UseVisualStyleBackColor = true;
+            this.b_pdf2jpg.Click += new System.EventHandler(this.b_pdf2jpg_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(808, 621);
+            this.Controls.Add(this.b_pdf2jpg);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.B_jpg2pdf);
             this.Controls.Add(this.TB_Rosrz);
             this.Controls.Add(this.listBox1);
@@ -96,6 +120,8 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.TextBox TB_Rosrz;
         private System.Windows.Forms.Button B_jpg2pdf;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button b_pdf2jpg;
     }
 }
 
