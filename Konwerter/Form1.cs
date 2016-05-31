@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using itextsharp;
 using iTextSharp;
+using GhostscriptSharp;
+using Ghostscript.NET;
 
 
 
@@ -23,6 +25,11 @@ namespace Konwerter
             InitializeComponent();
         }
 
+        iTextSharp.text.pdf.RandomAccessFileOrArray raf = null;
+        iTextSharp.text.pdf.PdfReader reader = null;
+        iTextSharp.text.Document doc = null;
+        iTextSharp.text.pdf.PdfCopy pdfCpy = null;
+        iTextSharp.text.pdf.PdfImportedPage page = null;
 
         private void bB_OpenDirectory_Click(object sender, EventArgs e)
         {
@@ -77,11 +84,7 @@ namespace Konwerter
         }
         public void splitPdfByPages(String sourcePdf, int numOfPages, string baseNameOutPdf)
         {
-            iTextSharp.text.pdf.RandomAccessFileOrArray raf = null;
-            iTextSharp.text.pdf.PdfReader reader = null;
-            iTextSharp.text.Document doc = null;
-            iTextSharp.text.pdf.PdfCopy pdfCpy = null;
-            iTextSharp.text.pdf.PdfImportedPage page = null;
+ 
             int pageCount = 0;
             string path = Path.GetFullPath(sourcePdf);
             string separtator = "_";
@@ -165,8 +168,129 @@ namespace Konwerter
         
         private void b_pdf2jpg_Click(object sender, EventArgs e)
         {
+            string sourcePdf = listBox1.SelectedItem.ToString();
+            string thename = Path.GetFileNameWithoutExtension(sourcePdf);
+            raf = new iTextSharp.text.pdf.RandomAccessFileOrArray(sourcePdf);
+            reader = new iTextSharp.text.pdf.PdfReader(raf, null);
+            var page = reader.GetPageSize(1);
+            int heigt = Convert.ToInt16(page.Height);
+            int width = Convert.ToInt16(page.Width);
+
+
+            //GhostscriptWrapper.GeneratePageThumb(@sourcePdf, @sourcePdf.Replace("pdf", "jpg"), 1, width, heigt);
+            //GhostscriptWrapper.GeneratePageThumb(sourcePdf, sourcePdf.Replace("pdf", "jpg"), 1, 297, 210);
+            GhostscriptJpegDevice dev = new GhostscriptJpegDevice(GhostscriptJpegDeviceType.Jpeg);
+            dev.GraphicsAlphaBits = GhostscriptImageDeviceAlphaBits.V_4;
+            dev.TextAlphaBits = GhostscriptImageDeviceAlphaBits.V_4;
+            dev.ResolutionXY = new GhostscriptImageDeviceResolution(300, 300);
+            dev.JpegQuality = 100;
+            dev.InputFiles.Add(@sourcePdf);
+            dev.Pdf.FirstPage = 1;
+            dev.Pdf.LastPage = 1;
+            dev.OutputPath = @sourcePdf.Replace("pdf", "jpg");
+            dev.Process();
+        }
+        public void MergePdf(string[] pdfFiles, string outputPath)            
+        {
+            bool result = false;
+            int pdfCount = 0;
+            int f = 0;
+            string filename = String.Empty;
+            iTextSharp.text.pdf.PdfReader reader = null;
+            int pageCount = 0;
+            iTextSharp.text.Document pdfDoc = null;
+            iTextSharp.text.pdf.PdfWriter writer = null;
+            iTextSharp.text.pdf.PdfContentByte cb = null;
+            iTextSharp.text.pdf.PdfImportedPage page = null;
+            int rotation = 0;
+            iTextSharp.text.Font bookmarkFont = iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, 4, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.RED);
+
+            try
+            {
+                pdfCount = pdfFiles.Length;
+                if (pdfCount > 1)
+                {
+                    filename = pdfFiles[f];
+                    reader = new iTextSharp.text.pdf.PdfReader(filename);
+                    pageCount = reader.NumberOfPages;
+                    pdfDoc = new iTextSharp.text.Document(reader.GetPageSizeWithRotation(1), 18, 18, 18, 18);
+                    writer = iTextSharp.text.pdf.PdfWriter.GetInstance(pdfDoc, new System.IO.FileStream(outputPath, System.IO.FileMode.Create));
+                    pdfDoc.AddAuthor("OPGK w Lublinie sp. z o. o. Sławomir Aleksak");
+                    pdfDoc.AddCreator("Konwerter");
+                    pdfDoc.Open();
+                    cb = writer.DirectContent;
+                    while (f < pdfCount)
+                    {
+                        var i = 0;
+                        while(i < pageCount)
+                        {
+                            i += 1;
+                            pdfDoc.SetPageSize(reader.GetPageSizeWithRotation(i));
+                            pdfDoc.NewPage();
+                            if (i == 1)
+                            {
+                                
+                                iTextSharp.text.Paragraph para = new iTextSharp.text.Paragraph(System.IO.Path.GetFileName(filename).ToUpper(), bookmarkFont);
+                                iTextSharp.text.Chapter chpter = new iTextSharp.text.Chapter(para, f + 1);
+                                pdfDoc.Add(chpter);
+                            }
+                            page = writer.GetImportedPage(reader, i);
+                            rotation = reader.GetPageRotation(i);
+                            if (rotation == 90)
+                            {
+                                cb.AddTemplate(page, 0, -1.0F, 1.0F, 0, 0, reader.GetPageSizeWithRotation(i).Height);                                
+                            }
+                            if (rotation == 270)
+                            {
+                                cb.AddTemplate(page, 0, 1.0F, -1.0F, 0, reader.GetPageSizeWithRotation(i).Width + 60, -30);
+                            }
+                            else
+                            {
+                                cb.AddTemplate(page, 1.0F, 0, 0, 1.0F, 0, 0);
+                            }
+
+                        }
+                        f += 1;
+                        if (f < pdfCount)
+                        {
+                        filename = pdfFiles[f];
+                        reader = new iTextSharp.text.pdf.PdfReader(filename);
+                        pageCount = reader.NumberOfPages;
+                        }
+                    }
+                    pdfDoc.Close();
+                    result = true;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
+
 
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var output = @"c:\Users\saleksak.OPGKLUBLIN\Desktop\P.0615.2016.169\testowy.pdf";
+        
+            //var input = listBox1.SelectedItems; 
+            //string input = Convert.ToString(listBox1.SelectedItems.Count - 1);
+            //string[] input = new string[listBox1.SelectedIte.Count];
+            //listBox1.SelectedItems.CopyTo(input, 0);
+
+            string[] input = new string[listBox1.SelectedItems.Count];
+            listBox1.SelectedItems.CopyTo(input, 0);
+            MergePdf(input, output);
+
+
+
+        }
+  
+
+        
+       
     }
 }
