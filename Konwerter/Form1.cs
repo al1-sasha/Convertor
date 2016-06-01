@@ -15,6 +15,7 @@ using Ghostscript.NET;
 
 
 
+
 namespace Konwerter
 {
 
@@ -55,11 +56,16 @@ namespace Konwerter
         {
             try
             {
-                if(listBox1.Items.Count > 0 | comboBox1.Text == "*.jpg") 
-                {
-                    for (int i = 0; i <= listBox1.Items.Count - 1; i++)
-                    {
-                        string source = listBox1.Items[i].ToString();
+                if(listBox1.SelectedItems.Count > 0 & comboBox1.Text == "*.jpg") 
+                {                                                            
+                    foreach (var item in listBox1.SelectedItems)     
+                      {
+                          Convert.ToString(item);
+                          string source = Convert.ToString(item);
+
+                    //for (int i = 0; i <= listBox1.Items.Count - 1; i++)
+                    //{
+                        //string source = listBox1.Items[i].ToString();
                         string name = Path.GetFileNameWithoutExtension(source);
                         string path = Path.GetFullPath(source);
                         iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(source);
@@ -73,17 +79,19 @@ namespace Konwerter
                                     doc.Open();
                                     image.SetAbsolutePosition(0, 0);
                                     writer.DirectContent.AddImage(image);
-                                    doc.Close();
-
+                                    doc.Close();                                    
                                 }
+                            
                             }
                         }
                     }
+                    System.Media.SystemSounds.Beep.Play();
                     MessageBox.Show("koniec");
                 }
                 else
                 {
-                    MessageBox.Show("Dodaj pliki jpg do listy");
+                    MessageBox.Show("Zaznacz pliki jpg na liście");
+                    
                 }
                 
                 }
@@ -145,6 +153,7 @@ namespace Konwerter
                                 pdfCpy.AddPage(page);
                             }
                         doc.Close();
+                        Console.Beep();
                     }
                                     }
                 reader.Close();
@@ -186,29 +195,38 @@ namespace Konwerter
         {
             try
             {
-                if (listBox1.Items.Count < 0 | comboBox1.Text == "*.pdf")
+                if (listBox1.SelectedIndex != -1 | comboBox1.Text == "*.pdf")
                 {
-                    string sourcePdf = listBox1.SelectedItem.ToString();
-                    string thename = Path.GetFileNameWithoutExtension(sourcePdf);
-                    raf = new iTextSharp.text.pdf.RandomAccessFileOrArray(sourcePdf);
-                    reader = new iTextSharp.text.pdf.PdfReader(raf, null);
-                    var page = reader.GetPageSize(1);
-                    int heigt = Convert.ToInt16(page.Height);
-                    int width = Convert.ToInt16(page.Width);
-                    //uzycie wprapera z Nuget
-                    //GhostscriptWrapper.GeneratePageThumb(@sourcePdf, @sourcePdf.Replace("pdf", "jpg"), 1, width, heigt);
-                    //GhostscriptWrapper.GeneratePageThumb(sourcePdf, sourcePdf.Replace("pdf", "jpg"), 1, 297, 210);
-                    GhostscriptJpegDevice dev = new GhostscriptJpegDevice(GhostscriptJpegDeviceType.Jpeg);
-                    dev.GraphicsAlphaBits = GhostscriptImageDeviceAlphaBits.V_4;
-                    dev.TextAlphaBits = GhostscriptImageDeviceAlphaBits.V_4;
-                    dev.ResolutionXY = new GhostscriptImageDeviceResolution(300, 300);
-                    dev.JpegQuality = 100;
-                    dev.InputFiles.Add(@sourcePdf);
-                    dev.Pdf.FirstPage = 1;
-                    dev.Pdf.LastPage = 1;
-                    dev.OutputPath = @sourcePdf.Replace("pdf", "jpg");
-                    dev.Process();
-                }
+                    
+                    foreach (var item in listBox1.SelectedItems)     
+                      {
+                          Convert.ToString(item);
+                          string sourcePdf = Convert.ToString(item);
+                          string thename = Path.GetFileNameWithoutExtension(sourcePdf);
+                            raf = new iTextSharp.text.pdf.RandomAccessFileOrArray(sourcePdf);
+                            reader = new iTextSharp.text.pdf.PdfReader(raf, null);
+                            var page = reader.GetPageSize(1);
+                            int heigt = Convert.ToInt16(page.Height);
+                            int width = Convert.ToInt16(page.Width);
+                            //uzycie wprapera z Nuget
+                            //GhostscriptWrapper.GeneratePageThumb(@sourcePdf, @sourcePdf.Replace("pdf", "jpg"), 1, width, heigt);
+                            //GhostscriptWrapper.GeneratePageThumb(sourcePdf, sourcePdf.Replace("pdf", "jpg"), 1, 297, 210);
+                            GhostscriptJpegDevice dev = new GhostscriptJpegDevice(GhostscriptJpegDeviceType.Jpeg);
+                            dev.GraphicsAlphaBits = GhostscriptImageDeviceAlphaBits.V_4;
+                            dev.TextAlphaBits = GhostscriptImageDeviceAlphaBits.V_4;
+                            dev.ResolutionXY = new GhostscriptImageDeviceResolution(300, 300);
+                            dev.JpegQuality = 100;
+                            dev.InputFiles.Add(@sourcePdf);
+                            dev.Pdf.FirstPage = 1;
+                            dev.Pdf.LastPage = 1;
+                            dev.OutputPath = @sourcePdf.Replace("pdf", "jpg");
+                            dev.Process();
+                        }
+                   
+                    System.Media.SystemSounds.Beep.Play();
+                    MessageBox.Show("koniec");
+                    }
+                                  
                 else
                 {
                     MessageBox.Show("Dodaj pliki pdf do listy");
