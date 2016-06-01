@@ -40,47 +40,56 @@ namespace Konwerter
                 listBox1.Items.Clear();
                 var path = System.IO.Path.Combine(filePatch);
                 var dir = new System.IO.DirectoryInfo(path);
-                foreach (string File in Directory.GetFiles(path, TB_Rosrz.Text, SearchOption.AllDirectories))
+                foreach (string File in Directory.GetFiles(path, comboBox1.Text, SearchOption.AllDirectories))
                 {
                     listBox1.Items.Add(File);
-
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                //throw ex;
             }
         }
 
         public void B_jpg2pdf_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i <= listBox1.Items.Count - 1; i++)
+            try
             {
-
-                string source = listBox1.Items[i].ToString();
-                string name = Path.GetFileNameWithoutExtension(source);
-                string path = Path.GetFullPath(source);
-                iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(source);
-                //string[] name = Directory.GetFiles(listBox1.Items[i].ToString());
-
-
-
-                using (FileStream fs = new FileStream(source.Replace(".jpg", ".pdf"), FileMode.Create, FileAccess.Write, FileShare.None))
+                if(listBox1.Items.Count > 0 | comboBox1.Text == "*.jpg") 
                 {
-                    using (iTextSharp.text.Document doc = new iTextSharp.text.Document(image))
+                    for (int i = 0; i <= listBox1.Items.Count - 1; i++)
                     {
-                        using (iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, fs))
+                        string source = listBox1.Items[i].ToString();
+                        string name = Path.GetFileNameWithoutExtension(source);
+                        string path = Path.GetFullPath(source);
+                        iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(source);
+                        //string[] name = Directory.GetFiles(listBox1.Items[i].ToString());
+                        using (FileStream fs = new FileStream(source.Replace(".jpg", ".pdf"), FileMode.Create, FileAccess.Write, FileShare.None))
                         {
-                            doc.Open();
-                            image.SetAbsolutePosition(0, 0);
-                            writer.DirectContent.AddImage(image);
-                            doc.Close();
+                            using (iTextSharp.text.Document doc = new iTextSharp.text.Document(image))
+                            {
+                                using (iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, fs))
+                                {
+                                    doc.Open();
+                                    image.SetAbsolutePosition(0, 0);
+                                    writer.DirectContent.AddImage(image);
+                                    doc.Close();
 
+                                }
+                            }
                         }
                     }
+                    MessageBox.Show("koniec");
                 }
+                else
+                {
+                    MessageBox.Show("Dodaj pliki jpg do listy");
+                }
+                
+                }
+            catch
+            {
             }
-            MessageBox.Show("koniec");
         }
         public void splitPdfByPages(String sourcePdf, int numOfPages, string baseNameOutPdf)
         {
@@ -111,11 +120,8 @@ namespace Konwerter
                     for (int i = 1; i <= pageCount; i++)
                     {
                         if (i < 10)
-
                             counter = "00";
-
-                        else
-
+                        else                            
                             counter = "0";
                         outfile = path.Replace(name, "") + thename + separtator + counter + i + extension;
                         //outfile = path + slash + thename + separtator + counter + i + extension;
@@ -138,13 +144,9 @@ namespace Konwerter
                                 page = pdfCpy.GetImportedPage(reader, j);
                                 pdfCpy.AddPage(page);
                             }
-
-
                         doc.Close();
                     }
-
-
-                }
+                                    }
                 reader.Close();
             }
 
@@ -160,39 +162,66 @@ namespace Konwerter
 
         public void button1_Click(object sender, EventArgs e)
         {
-            string sourcePdf = listBox1.SelectedItem.ToString();
-            string file = Path.GetFileName(listBox1.SelectedItem.ToString());
-            //splitPdfByPages(@"C:\Users\saleksak.OPGKLUBLIN\Desktop\P.0615.2016.169\L5.pdf", 1, "L5");
-            splitPdfByPages(sourcePdf, 1, file);
+            try
+            {
+
+                if (listBox1.SelectedItems.Count == 1 | comboBox1.Text == "*.pdf")
+                {
+                    string sourcePdf = listBox1.SelectedItem.ToString();
+                    string file = Path.GetFileName(listBox1.SelectedItem.ToString());
+                    //splitPdfByPages(@"C:\Users\saleksak.OPGKLUBLIN\Desktop\P.0615.2016.169\L5.pdf", 1, "L5");
+                    splitPdfByPages(sourcePdf, 1, file);
+                }
+                else
+                {
+                    MessageBox.Show("Wybierz plik do dzielenia");
+                }
+            }
+            catch
+            {
+            }
         }
-        
+
         private void b_pdf2jpg_Click(object sender, EventArgs e)
         {
-            string sourcePdf = listBox1.SelectedItem.ToString();
-            string thename = Path.GetFileNameWithoutExtension(sourcePdf);
-            raf = new iTextSharp.text.pdf.RandomAccessFileOrArray(sourcePdf);
-            reader = new iTextSharp.text.pdf.PdfReader(raf, null);
-            var page = reader.GetPageSize(1);
-            int heigt = Convert.ToInt16(page.Height);
-            int width = Convert.ToInt16(page.Width);
-
-
-            //GhostscriptWrapper.GeneratePageThumb(@sourcePdf, @sourcePdf.Replace("pdf", "jpg"), 1, width, heigt);
-            //GhostscriptWrapper.GeneratePageThumb(sourcePdf, sourcePdf.Replace("pdf", "jpg"), 1, 297, 210);
-            GhostscriptJpegDevice dev = new GhostscriptJpegDevice(GhostscriptJpegDeviceType.Jpeg);
-            dev.GraphicsAlphaBits = GhostscriptImageDeviceAlphaBits.V_4;
-            dev.TextAlphaBits = GhostscriptImageDeviceAlphaBits.V_4;
-            dev.ResolutionXY = new GhostscriptImageDeviceResolution(300, 300);
-            dev.JpegQuality = 100;
-            dev.InputFiles.Add(@sourcePdf);
-            dev.Pdf.FirstPage = 1;
-            dev.Pdf.LastPage = 1;
-            dev.OutputPath = @sourcePdf.Replace("pdf", "jpg");
-            dev.Process();
-        }
+            try
+            {
+                if (listBox1.Items.Count < 0 | comboBox1.Text == "*.pdf")
+                {
+                    string sourcePdf = listBox1.SelectedItem.ToString();
+                    string thename = Path.GetFileNameWithoutExtension(sourcePdf);
+                    raf = new iTextSharp.text.pdf.RandomAccessFileOrArray(sourcePdf);
+                    reader = new iTextSharp.text.pdf.PdfReader(raf, null);
+                    var page = reader.GetPageSize(1);
+                    int heigt = Convert.ToInt16(page.Height);
+                    int width = Convert.ToInt16(page.Width);
+                    //uzycie wprapera z Nuget
+                    //GhostscriptWrapper.GeneratePageThumb(@sourcePdf, @sourcePdf.Replace("pdf", "jpg"), 1, width, heigt);
+                    //GhostscriptWrapper.GeneratePageThumb(sourcePdf, sourcePdf.Replace("pdf", "jpg"), 1, 297, 210);
+                    GhostscriptJpegDevice dev = new GhostscriptJpegDevice(GhostscriptJpegDeviceType.Jpeg);
+                    dev.GraphicsAlphaBits = GhostscriptImageDeviceAlphaBits.V_4;
+                    dev.TextAlphaBits = GhostscriptImageDeviceAlphaBits.V_4;
+                    dev.ResolutionXY = new GhostscriptImageDeviceResolution(300, 300);
+                    dev.JpegQuality = 100;
+                    dev.InputFiles.Add(@sourcePdf);
+                    dev.Pdf.FirstPage = 1;
+                    dev.Pdf.LastPage = 1;
+                    dev.OutputPath = @sourcePdf.Replace("pdf", "jpg");
+                    dev.Process();
+                }
+                else
+                {
+                    MessageBox.Show("Dodaj pliki pdf do listy");
+                }
+            }
+            catch
+            {
+            }
+        }          
+               
         public void MergePdf(string[] pdfFiles, string outputPath)            
         {
-            bool result = false;
+            //bool result = false;
             int pdfCount = 0;
             int f = 0;
             string filename = String.Empty;
@@ -228,8 +257,7 @@ namespace Konwerter
                             pdfDoc.SetPageSize(reader.GetPageSizeWithRotation(i));
                             pdfDoc.NewPage();
                             if (i == 1)
-                            {
-                                
+                            {                                
                                 iTextSharp.text.Paragraph para = new iTextSharp.text.Paragraph(System.IO.Path.GetFileName(filename).ToUpper(), bookmarkFont);
                                 iTextSharp.text.Chapter chpter = new iTextSharp.text.Chapter(para, f + 1);
                                 pdfDoc.Add(chpter);
@@ -247,8 +275,7 @@ namespace Konwerter
                             else
                             {
                                 cb.AddTemplate(page, 1.0F, 0, 0, 1.0F, 0, 0);
-                            }
-
+                            }                            
                         }
                         f += 1;
                         if (f < pdfCount)
@@ -259,38 +286,57 @@ namespace Konwerter
                         }
                     }
                     pdfDoc.Close();
-                    result = true;
-
+                    //result = true;
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
-            }
-            
-
-
+            }    
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var output = @"c:\Users\saleksak.OPGKLUBLIN\Desktop\P.0615.2016.169\testowy.pdf";
-        
-            //var input = listBox1.SelectedItems; 
-            //string input = Convert.ToString(listBox1.SelectedItems.Count - 1);
-            //string[] input = new string[listBox1.SelectedIte.Count];
-            //listBox1.SelectedItems.CopyTo(input, 0);
+            if (textBox1.Text != string.Empty)
+            {
+                var output = textBox1.Text;
 
-            string[] input = new string[listBox1.SelectedItems.Count];
-            listBox1.SelectedItems.CopyTo(input, 0);
-            MergePdf(input, output);
+                //var input = listBox1.SelectedItems; 
+                //string input = Convert.ToString(listBox1.SelectedItems.Count - 1);
+                //string[] input = new string[listBox1.SelectedIte.Count];
+                //listBox1.SelectedItems.CopyTo(input, 0);
 
-
+                string[] input = new string[listBox1.SelectedItems.Count];
+                listBox1.SelectedItems.CopyTo(input, 0);
+                MergePdf(input, output);
+                input.DefaultIfEmpty();
+                output.DefaultIfEmpty();
+            }
+            else
+            {
+                MessageBox.Show("Zaznacz pliki na liście i wprowadź nazwę nowego pliku.");
+            }
 
         }
-  
 
-        
-       
+        private void b_delI_Click(object sender, EventArgs e)
+        {
+            ListBox.SelectedObjectCollection selectedItems = new ListBox.SelectedObjectCollection(listBox1);
+            selectedItems = listBox1.SelectedItems;
+
+            if (listBox1.SelectedIndex != -1)
+            {
+                for (int i = selectedItems.Count - 1; i >= 0; i--)
+                    listBox1.Items.Remove(selectedItems[i]);
+            }
+            else
+                MessageBox.Show("Zaznacz pliki na liście");
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBox1.Text = Convert.ToString(listBox1.SelectedItem).Replace(".pdf", "_polaczony.pdf"); 
+        }           
+      
     }
 }
