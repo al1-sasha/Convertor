@@ -62,7 +62,6 @@ namespace Konwerter
                       {
                           Convert.ToString(item);
                           string source = Convert.ToString(item);
-
                     //for (int i = 0; i <= listBox1.Items.Count - 1; i++)
                     //{
                         //string source = listBox1.Items[i].ToString();
@@ -90,13 +89,16 @@ namespace Konwerter
                 }
                 else
                 {
+                    System.Media.SystemSounds.Beep.Play();
                     MessageBox.Show("Zaznacz pliki jpg na liście");
                     
                 }
                 
                 }
-            catch
+             catch (Exception ex)
             {
+                throw ex;
+              
             }
         }
         public void splitPdfByPages(String sourcePdf, int numOfPages, string baseNameOutPdf)
@@ -183,7 +185,9 @@ namespace Konwerter
                 }
                 else
                 {
+                    System.Media.SystemSounds.Beep.Play();
                     MessageBox.Show("Wybierz plik do dzielenia");
+                    
                 }
             }
             catch
@@ -195,7 +199,7 @@ namespace Konwerter
         {
             try
             {
-                if (listBox1.SelectedIndex != -1 | comboBox1.Text == "*.pdf")
+                if (listBox1.SelectedIndex != -1 & comboBox1.Text == "*.pdf")
                 {
                     
                     foreach (var item in listBox1.SelectedItems)     
@@ -229,7 +233,9 @@ namespace Konwerter
                                   
                 else
                 {
-                    MessageBox.Show("Dodaj pliki pdf do listy");
+                    System.Media.SystemSounds.Beep.Play();
+                    MessageBox.Show("Wskaż pliki pdf na liście");
+                   
                 }
             }
             catch
@@ -332,6 +338,7 @@ namespace Konwerter
             }
             else
             {
+                System.Media.SystemSounds.Beep.Play();
                 MessageBox.Show("Zaznacz pliki na liście i wprowadź nazwę nowego pliku.");
             }
 
@@ -348,6 +355,7 @@ namespace Konwerter
                     listBox1.Items.Remove(selectedItems[i]);
             }
             else
+                System.Media.SystemSounds.Beep.Play();
                 MessageBox.Show("Zaznacz pliki na liście");
         }
 
