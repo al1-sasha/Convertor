@@ -31,7 +31,8 @@ namespace Konwerter
         iTextSharp.text.Document doc = null;
         iTextSharp.text.pdf.PdfCopy pdfCpy = null;
         iTextSharp.text.pdf.PdfImportedPage page = null;
-
+        //public System.Drawing.Imaging.ImageFormat typ;
+        
         private void bB_OpenDirectory_Click(object sender, EventArgs e)
         {
             try
@@ -54,36 +55,58 @@ namespace Konwerter
 
         public void B_jpg2pdf_Click(object sender, EventArgs e)
         {
+            string imgextend = comboBox1.Text.Replace("*.", "");           
             try
             {
-                if(listBox1.SelectedItems.Count > 0 & comboBox1.Text == "*.jpg") 
-                {                                                            
+                if(listBox1.SelectedItems.Count > 0 & comboBox1.Text != "*.pdf") 
+                {
+                    //if (imgextend== "jpg")
+                    //{
+                    //    System.Drawing.Imaging.ImageFormat typ = System.Drawing.Imaging.ImageFormat.Jpeg;
+                    //}
+                    //else
+                    //{
+                    //    System.Drawing.Imaging.ImageFormat typ = System.Drawing.Imaging.ImageFormat.Tiff;
+                    //}       
+     
                     foreach (var item in listBox1.SelectedItems)     
                       {
-                          Convert.ToString(item);
-                          string source = Convert.ToString(item);
-                    //for (int i = 0; i <= listBox1.Items.Count - 1; i++)
-                    //{
-                        //string source = listBox1.Items[i].ToString();
+                          //if (imgextend == "jpg")
+                          //{
+                          //    System.Drawing.Imaging.ImageFormat typ = System.Drawing.Imaging.ImageFormat.Jpeg;
+                          //}
+                          //if (imgextend == "tif")
+                          //{
+                          //    System.Drawing.Imaging.ImageFormat typ = System.Drawing.Imaging.ImageFormat.Tiff;
+                          //}  
+                        Convert.ToString(item);
+                        string source = Convert.ToString(item);
                         string name = Path.GetFileNameWithoutExtension(source);
                         string path = Path.GetFullPath(source);
-                        iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(source);
-                        //string[] name = Directory.GetFiles(listBox1.Items[i].ToString());
-                        using (FileStream fs = new FileStream(source.Replace(".jpg", ".pdf"), FileMode.Create, FileAccess.Write, FileShare.None))
+                        FileStream imgload = new FileStream(source, FileMode.Open, FileAccess.Read);                        
+                        var pic = Image.FromStream(imgload);
+                        var x = pic.Width;
+                        var y = pic.Height;
+                        pic.Dispose();
+                        //var filetype = System.Drawing.Imaging.ImageFormat;
+                        
+
+                        if (x > 14400 || y > 14400)
                         {
-                            using (iTextSharp.text.Document doc = new iTextSharp.text.Document(image))
-                            {
-                                using (iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, fs))
-                                {
-                                    doc.Open();
-                                    image.SetAbsolutePosition(0, 0);
-                                    writer.DirectContent.AddImage(image);
-                                    doc.Close();                                    
-                                }
+                            source = source.Replace("." + imgextend, "_resized." + imgextend);
+                            //source = @"c:\Users\saleksak.OPGKLUBLIN\Desktop\P.0615.2016.169\t.jpg";
+                            ResizeImg(imgload, source);
+                            Jpg2pdfConversion(source, imgextend);
+                            imgload.Dispose();
                             
-                            }
                         }
+                        else
+                        {
+                            Jpg2pdfConversion(source, imgextend);
+                        }
+                        
                     }
+                    
                     System.Media.SystemSounds.Beep.Play();
                     MessageBox.Show("koniec");
                 }
@@ -101,6 +124,100 @@ namespace Konwerter
               
             }
         }
+        static void Jpg2pdfConversion(string source, string imgextend)
+        {
+            iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(source);
+            using (FileStream fs = new FileStream(source.Replace("." + imgextend, ".pdf"), FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                using (iTextSharp.text.Document doc = new iTextSharp.text.Document(image))
+                {
+                    using (iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, fs))
+                    {
+                        doc.Open();
+                        image.SetAbsolutePosition(0, 0);
+                        writer.DirectContent.AddImage(image);
+                        doc.Close();
+                    }
+
+                }
+            }
+
+        }
+        void ResizeImg(FileStream imgload, string outputFile)
+        {
+            string imgextend = comboBox1.Text.Replace("*.", "");
+            if (listBox1.SelectedItems.Count > 0 & comboBox1.Text != "*.pdf")
+            {
+
+                
+                using (var srcImage = Image.FromStream(imgload))
+                {
+                    imgload.Close();
+                    double scaleFactor = 1;
+
+                    if (Convert.ToUInt32(srcImage.Width) > Convert.ToUInt32(srcImage.Height))
+                    {
+                        //scaleFactor = 14400/(Convert.ToUInt32(srcImage.Width));
+                        scaleFactor = (double)7200 / srcImage.Width;
+                        scaleFactor = Math.Round(scaleFactor, 1);
+                        //MessageBox.Show(Convert.ToString(scaleFactor));
+                    }
+                    else
+                    {
+                        //scaleFactor = 14400/Convert.ToUInt32(srcImage.Height);
+                        scaleFactor = (double)7200 / srcImage.Height;
+                        scaleFactor = Math.Round(scaleFactor, 1);
+                        //MessageBox.Show(Convert.ToString(scaleFactor));
+                    }
+                    //MessageBox.Show("scaleFactor" + Convert.ToString(scaleFactor));
+                    var newWidth = Convert.ToInt32(srcImage.Width * scaleFactor);
+                    var newHeight = Convert.ToInt32(srcImage.Height * scaleFactor);
+                    using (var newImage = new Bitmap(newWidth, newHeight))
+                    using (var graphics = Graphics.FromImage(newImage))
+                    {
+                        graphics.DrawImage(srcImage, new Rectangle(0, 0, newWidth, newHeight));
+
+                        newImage.Save(outputFile, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    }
+                }
+
+            }
+        }
+        //static void ResizeImg(string imageFile, string outputFile)
+        //{
+        //    using (var srcImage = Image.FromFile(imageFile))
+        //    {
+        //       double scaleFactor = 1;
+        //        if (Convert.ToUInt32(srcImage.Width) > Convert.ToUInt32(srcImage.Height))
+        //        {
+        //            //scaleFactor = 14400/(Convert.ToUInt32(srcImage.Width));
+        //            scaleFactor = (double)7200 / srcImage.Width;
+        //            scaleFactor = Math.Round(scaleFactor, 1);
+        //            MessageBox.Show(Convert.ToString(scaleFactor));
+        //        }
+        //        else
+        //        {
+        //            //scaleFactor = 14400/Convert.ToUInt32(srcImage.Height);
+        //            scaleFactor = (double)7200 / srcImage.Height;
+        //            scaleFactor = Math.Round(scaleFactor, 1);
+        //            MessageBox.Show(Convert.ToString(scaleFactor));
+        //        }
+        //        MessageBox.Show(Convert.ToString(scaleFactor));
+        //        MessageBox.Show(Convert.ToString(srcImage.Width));
+        //        MessageBox.Show(Convert.ToString(srcImage.Height));
+        //        var newWidth = Convert.ToInt32(srcImage.Width * scaleFactor);
+        //        var newHeight = Convert.ToInt32(srcImage.Height * scaleFactor);
+        //        using (var newImage = new Bitmap(newWidth, newHeight))
+        //        using (var graphics = Graphics.FromImage(newImage))
+        //        {
+        //            graphics.DrawImage(srcImage, new Rectangle(0, 0, newWidth, newHeight));
+
+        //            newImage.Save(outputFile, System.Drawing.Imaging.ImageFormat.Jpeg);
+        //        }
+        //    }
+            
+        //}
+
         public void splitPdfByPages(String sourcePdf, int numOfPages, string baseNameOutPdf)
         {
  
@@ -165,11 +282,7 @@ namespace Konwerter
             {
                 throw ex;
             }
-        }               
-            
-         
-
-        
+        }
 
         public void button1_Click(object sender, EventArgs e)
         {
@@ -362,7 +475,7 @@ namespace Konwerter
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             textBox1.Text = Convert.ToString(listBox1.SelectedItem).Replace(".pdf", "_polaczony.pdf"); 
-        }           
-      
+        }
+
     }
 }

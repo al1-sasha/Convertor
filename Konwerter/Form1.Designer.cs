@@ -88,7 +88,7 @@
             this.button1.Size = new System.Drawing.Size(87, 35);
             this.button1.TabIndex = 4;
             this.button1.Text = "Podziel plik pdf";
-            this.toolTip4.SetToolTip(this.button1, "Dzieli wybrany plik pdf na pojedyñcze strony.");
+            this.toolTip4.SetToolTip(this.button1, "Dzieli wybrany plik pdf na pojedyńcze strony.");
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -144,6 +144,7 @@
             // 
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
+            "*.tif",
             "*.jpg",
             "*.pdf"});
             this.comboBox1.Location = new System.Drawing.Point(30, 86);
