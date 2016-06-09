@@ -113,7 +113,7 @@ namespace Konwerter
                 else
                 {
                     System.Media.SystemSounds.Beep.Play();
-                    MessageBox.Show("Zaznacz pliki jpg na liście");
+                    MessageBox.Show("Zaznacz pliki na liście");
                     
                 }
                 
@@ -475,6 +475,24 @@ namespace Konwerter
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             textBox1.Text = Convert.ToString(listBox1.SelectedItem).Replace(".pdf", "_polaczony.pdf"); 
+        }
+
+        private void pomocToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Program do konwersji plików jpg/tif i zarządzaniem plikami pdf." +       
+                "\n" + 
+                "Autor nie bierze odpowiedzialności za działanie programu, " +
+                "\n" +
+                "aplikacji używasz na własną odpowiedzialnoć." +
+                "\n" +
+                "pozdrawiam Sławomir Aleksak" +
+                "\n" +             
+                "kontakt: iformatykageodezja@gmail.com");
+        }
+
+        private void zakończToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Dispose();
         }
 
     }
