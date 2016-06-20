@@ -48,9 +48,10 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.plikToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.zakończToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oProgramieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pomocToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.zakończToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.b_indexChange = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -115,18 +116,18 @@
             this.b_joinPdf.Name = "b_joinPdf";
             this.b_joinPdf.Size = new System.Drawing.Size(87, 35);
             this.b_joinPdf.TabIndex = 6;
-            this.b_joinPdf.Text = "Połącz";
+            this.b_joinPdf.Text = "Połącz plik pdf";
             this.toolTip5.SetToolTip(this.b_joinPdf, "Łączy wskazane pliki pdf i zapisuje do nowego pliku.");
             this.b_joinPdf.UseVisualStyleBackColor = true;
             this.b_joinPdf.Click += new System.EventHandler(this.button2_Click);
             // 
             // b_delI
             // 
-            this.b_delI.Location = new System.Drawing.Point(443, 195);
+            this.b_delI.Location = new System.Drawing.Point(316, 199);
             this.b_delI.Name = "b_delI";
-            this.b_delI.Size = new System.Drawing.Size(75, 23);
+            this.b_delI.Size = new System.Drawing.Size(107, 33);
             this.b_delI.TabIndex = 7;
-            this.b_delI.Text = "Usuń z listy";
+            this.b_delI.Text = "Usuń pliki z listy";
             this.b_delI.UseVisualStyleBackColor = true;
             this.b_delI.Click += new System.EventHandler(this.b_delI_Click);
             // 
@@ -142,9 +143,10 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(221, 256);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 13);
+            this.label1.Size = new System.Drawing.Size(408, 13);
             this.label1.TabIndex = 9;
-            this.label1.Text = "Plik łączony";
+            this.label1.Text = "Nowy  pdf z łączonych plików pdf. (Do pierszego pliku dolaczone zostaną pozostałe" +
+    ")";
             // 
             // comboBox1
             // 
@@ -177,36 +179,47 @@
             this.plikToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.zakończToolStripMenuItem});
             this.plikToolStripMenuItem.Name = "plikToolStripMenuItem";
-            this.plikToolStripMenuItem.Size = new System.Drawing.Size(34, 22);
+            this.plikToolStripMenuItem.Size = new System.Drawing.Size(36, 22);
             this.plikToolStripMenuItem.Text = "Plik";
+            // 
+            // zakończToolStripMenuItem
+            // 
+            this.zakończToolStripMenuItem.Name = "zakończToolStripMenuItem";
+            this.zakończToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.zakończToolStripMenuItem.Text = "Zakończ";
+            this.zakończToolStripMenuItem.Click += new System.EventHandler(this.zakończToolStripMenuItem_Click);
             // 
             // oProgramieToolStripMenuItem
             // 
             this.oProgramieToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.pomocToolStripMenuItem});
             this.oProgramieToolStripMenuItem.Name = "oProgramieToolStripMenuItem";
-            this.oProgramieToolStripMenuItem.Size = new System.Drawing.Size(78, 22);
+            this.oProgramieToolStripMenuItem.Size = new System.Drawing.Size(86, 22);
             this.oProgramieToolStripMenuItem.Text = "O programie";
             // 
             // pomocToolStripMenuItem
             // 
             this.pomocToolStripMenuItem.Name = "pomocToolStripMenuItem";
-            this.pomocToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pomocToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
             this.pomocToolStripMenuItem.Text = "Pomoc";
             this.pomocToolStripMenuItem.Click += new System.EventHandler(this.pomocToolStripMenuItem_Click);
             // 
-            // zakończToolStripMenuItem
+            // b_indexChange
             // 
-            this.zakończToolStripMenuItem.Name = "zakończToolStripMenuItem";
-            this.zakończToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.zakończToolStripMenuItem.Text = "Zakończ";
-            this.zakończToolStripMenuItem.Click += new System.EventHandler(this.zakończToolStripMenuItem_Click);
+            this.b_indexChange.Location = new System.Drawing.Point(533, 199);
+            this.b_indexChange.Name = "b_indexChange";
+            this.b_indexChange.Size = new System.Drawing.Size(126, 33);
+            this.b_indexChange.TabIndex = 12;
+            this.b_indexChange.Text = "Ustaw jako ostatni";
+            this.b_indexChange.UseVisualStyleBackColor = true;
+            this.b_indexChange.Click += new System.EventHandler(this.b_indexChange_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(788, 385);
+            this.Controls.Add(this.b_indexChange);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
@@ -252,6 +265,7 @@
         private System.Windows.Forms.ToolStripMenuItem oProgramieToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pomocToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem zakończToolStripMenuItem;
+        private System.Windows.Forms.Button b_indexChange;
     }
 }
 

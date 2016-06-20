@@ -13,7 +13,8 @@ using iTextSharp;
 using GhostscriptSharp;
 using Ghostscript.NET;
 
-
+//Program przeznaczony do dzielenia/łączenia plików pdf. Konwersji plików pdf na obrazy w formacie jpg/tif i odwrotnie.
+//Autor: Sławomir Aleksak
 
 
 namespace Konwerter
@@ -31,7 +32,7 @@ namespace Konwerter
         iTextSharp.text.Document doc = null;
         iTextSharp.text.pdf.PdfCopy pdfCpy = null;
         iTextSharp.text.pdf.PdfImportedPage page = null;
-        //public System.Drawing.Imaging.ImageFormat typ;
+     
         
         private void bB_OpenDirectory_Click(object sender, EventArgs e)
         {
@@ -49,7 +50,7 @@ namespace Konwerter
             }
             catch
             {
-                //throw ex;
+
             }
         }
 
@@ -59,26 +60,10 @@ namespace Konwerter
             try
             {
                 if(listBox1.SelectedItems.Count > 0 & comboBox1.Text != "*.pdf") 
-                {
-                    //if (imgextend== "jpg")
-                    //{
-                    //    System.Drawing.Imaging.ImageFormat typ = System.Drawing.Imaging.ImageFormat.Jpeg;
-                    //}
-                    //else
-                    //{
-                    //    System.Drawing.Imaging.ImageFormat typ = System.Drawing.Imaging.ImageFormat.Tiff;
-                    //}       
+                {                 
      
                     foreach (var item in listBox1.SelectedItems)     
-                      {
-                          //if (imgextend == "jpg")
-                          //{
-                          //    System.Drawing.Imaging.ImageFormat typ = System.Drawing.Imaging.ImageFormat.Jpeg;
-                          //}
-                          //if (imgextend == "tif")
-                          //{
-                          //    System.Drawing.Imaging.ImageFormat typ = System.Drawing.Imaging.ImageFormat.Tiff;
-                          //}  
+                      {                 
                         Convert.ToString(item);
                         string source = Convert.ToString(item);
                         string name = Path.GetFileNameWithoutExtension(source);
@@ -88,16 +73,15 @@ namespace Konwerter
                         var x = pic.Width;
                         var y = pic.Height;
                         pic.Dispose();
-                        //var filetype = System.Drawing.Imaging.ImageFormat;
+       
                         
 
                         if (x > 14400 || y > 14400)
                         {
                             source = source.Replace("." + imgextend, "_resized." + imgextend);
-                            //source = @"c:\Users\saleksak.OPGKLUBLIN\Desktop\P.0615.2016.169\t.jpg";
                             ResizeImg(imgload, source);
                             Jpg2pdfConversion(source, imgextend);
-                            imgload.Dispose();
+                  
                             
                         }
                         else
@@ -148,7 +132,7 @@ namespace Konwerter
             string imgextend = comboBox1.Text.Replace("*.", "");
             if (listBox1.SelectedItems.Count > 0 & comboBox1.Text != "*.pdf")
             {
-
+                
                 
                 using (var srcImage = Image.FromStream(imgload))
                 {
@@ -157,19 +141,18 @@ namespace Konwerter
 
                     if (Convert.ToUInt32(srcImage.Width) > Convert.ToUInt32(srcImage.Height))
                     {
-                        //scaleFactor = 14400/(Convert.ToUInt32(srcImage.Width));
+                    
                         scaleFactor = (double)7200 / srcImage.Width;
                         scaleFactor = Math.Round(scaleFactor, 1);
-                        //MessageBox.Show(Convert.ToString(scaleFactor));
+                   
                     }
                     else
                     {
-                        //scaleFactor = 14400/Convert.ToUInt32(srcImage.Height);
+              
                         scaleFactor = (double)7200 / srcImage.Height;
                         scaleFactor = Math.Round(scaleFactor, 1);
-                        //MessageBox.Show(Convert.ToString(scaleFactor));
+           
                     }
-                    //MessageBox.Show("scaleFactor" + Convert.ToString(scaleFactor));
                     var newWidth = Convert.ToInt32(srcImage.Width * scaleFactor);
                     var newHeight = Convert.ToInt32(srcImage.Height * scaleFactor);
                     using (var newImage = new Bitmap(newWidth, newHeight))
@@ -179,44 +162,11 @@ namespace Konwerter
 
                         newImage.Save(outputFile, System.Drawing.Imaging.ImageFormat.Jpeg);
                     }
+                    srcImage.Dispose();
                 }
 
             }
         }
-        //static void ResizeImg(string imageFile, string outputFile)
-        //{
-        //    using (var srcImage = Image.FromFile(imageFile))
-        //    {
-        //       double scaleFactor = 1;
-        //        if (Convert.ToUInt32(srcImage.Width) > Convert.ToUInt32(srcImage.Height))
-        //        {
-        //            //scaleFactor = 14400/(Convert.ToUInt32(srcImage.Width));
-        //            scaleFactor = (double)7200 / srcImage.Width;
-        //            scaleFactor = Math.Round(scaleFactor, 1);
-        //            MessageBox.Show(Convert.ToString(scaleFactor));
-        //        }
-        //        else
-        //        {
-        //            //scaleFactor = 14400/Convert.ToUInt32(srcImage.Height);
-        //            scaleFactor = (double)7200 / srcImage.Height;
-        //            scaleFactor = Math.Round(scaleFactor, 1);
-        //            MessageBox.Show(Convert.ToString(scaleFactor));
-        //        }
-        //        MessageBox.Show(Convert.ToString(scaleFactor));
-        //        MessageBox.Show(Convert.ToString(srcImage.Width));
-        //        MessageBox.Show(Convert.ToString(srcImage.Height));
-        //        var newWidth = Convert.ToInt32(srcImage.Width * scaleFactor);
-        //        var newHeight = Convert.ToInt32(srcImage.Height * scaleFactor);
-        //        using (var newImage = new Bitmap(newWidth, newHeight))
-        //        using (var graphics = Graphics.FromImage(newImage))
-        //        {
-        //            graphics.DrawImage(srcImage, new Rectangle(0, 0, newWidth, newHeight));
-
-        //            newImage.Save(outputFile, System.Drawing.Imaging.ImageFormat.Jpeg);
-        //        }
-        //    }
-            
-        //}
 
         public void splitPdfByPages(String sourcePdf, int numOfPages, string baseNameOutPdf)
         {
@@ -250,9 +200,7 @@ namespace Konwerter
                             counter = "00";
                         else                            
                             counter = "0";
-                        outfile = path.Replace(name, "") + thename + separtator + counter + i + extension;
-                        //outfile = path + slash + thename + separtator + counter + i + extension;
-                        //outfile = @"C:\Users\saleksak.OPGKLUBLIN\Desktop\P.0615.2016.169" + slash + thename + separtator + counter + i + extension;
+                        outfile = path.Replace(name, "") + thename + separtator + counter + i + extension;                   
                         doc = new iTextSharp.text.Document(reader.GetPageSizeWithRotation(currentPage));
                         pdfCpy = new iTextSharp.text.pdf.PdfCopy(doc, new System.IO.FileStream(outfile, System.IO.FileMode.Create));
                         doc.Open();
@@ -293,7 +241,6 @@ namespace Konwerter
                 {
                     string sourcePdf = listBox1.SelectedItem.ToString();
                     string file = Path.GetFileName(listBox1.SelectedItem.ToString());
-                    //splitPdfByPages(@"C:\Users\saleksak.OPGKLUBLIN\Desktop\P.0615.2016.169\L5.pdf", 1, "L5");
                     splitPdfByPages(sourcePdf, 1, file);
                 }
                 else
@@ -358,7 +305,7 @@ namespace Konwerter
                
         public void MergePdf(string[] pdfFiles, string outputPath)            
         {
-            //bool result = false;
+            
             int pdfCount = 0;
             int f = 0;
             string filename = String.Empty;
@@ -422,8 +369,7 @@ namespace Konwerter
                         pageCount = reader.NumberOfPages;
                         }
                     }
-                    pdfDoc.Close();
-                    //result = true;
+                    pdfDoc.Close();               
                 }
             }
             catch (Exception ex)
@@ -437,12 +383,6 @@ namespace Konwerter
             if (textBox1.Text != string.Empty)
             {
                 var output = textBox1.Text;
-
-                //var input = listBox1.SelectedItems; 
-                //string input = Convert.ToString(listBox1.SelectedItems.Count - 1);
-                //string[] input = new string[listBox1.SelectedIte.Count];
-                //listBox1.SelectedItems.CopyTo(input, 0);
-
                 string[] input = new string[listBox1.SelectedItems.Count];
                 listBox1.SelectedItems.CopyTo(input, 0);
                 MergePdf(input, output);
@@ -454,6 +394,7 @@ namespace Konwerter
                 System.Media.SystemSounds.Beep.Play();
                 MessageBox.Show("Zaznacz pliki na liście i wprowadź nazwę nowego pliku.");
             }
+            MessageBox.Show("Koniec");
 
         }
 
@@ -483,7 +424,9 @@ namespace Konwerter
                 "\n" + 
                 "Autor nie bierze odpowiedzialności za działanie programu, " +
                 "\n" +
-                "aplikacji używasz na własną odpowiedzialnoć." +
+                "aplikacji używasz na własną odpowiedzialnoć. Przy dużych plikach" +
+                "\n" +
+                " na Windows XP mogą wystąpić problemy" +
                 "\n" +
                 "pozdrawiam Sławomir Aleksak" +
                 "\n" +             
@@ -493,6 +436,23 @@ namespace Konwerter
         private void zakończToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Dispose();
+        }
+
+        private void b_indexChange_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string it = Convert.ToString(listBox1.SelectedItem);
+                var item = listBox1.Items.Count - 1;
+                listBox1.Items.Remove(listBox1.SelectedItem);
+                listBox1.Items.Insert(item, it);
+                
+            }
+            catch
+            {
+            }
+
+
         }
 
     }
